@@ -1,0 +1,1324 @@
+\documentclass{article}
+\usepackage{packages}
+\usepackage{environments}
+\usepackage{commands}
+
+
+\begin{document}
+
+\begin{titlepage}
+	\centering
+	\vspace*{\fill} % Vertically center the text
+	\Huge{Подготовка к поступлению в аспирантуру 2023} \\
+	\Large{\textbf{МФТИ}} \\
+	\Large{1.2 Компьютерные науки и информатика (ФПМИ)} \\
+	\vspace{2em} % Add some vertical space between the title and author
+	\Large\textbf{Матвеев Артём}
+	\vspace*{\fill} % Vertically center the text
+	\newpage
+\end{titlepage}
+\setcounter{page}{2}
+
+\part*{Математический анализ}
+
+\section*{Пределы последовательности. Критерий Коши. Существование предела у монотонно возрастающей ограниченной сверху последовательности. Теорема Больцано-Вейерштрассе о существовании сходящейся подпоследовательности у ограниченной последовательности}
+
+\subsection*{Пределы последовательности}
+
+Назовём окрестностью точки $a \in \mathbb R$ любой интервал, содержащий эту точку, и будем обозначать её как $\mathrm{U}(a)$.
+
+$\mathrm{U}_{\epsilon}(a) = (a - \epsilon; a + \epsilon)$ -- симметричная $\epsilon$-окрестность.
+
+$\mathrm{U}'_{\epsilon}(a) = (a - \epsilon; a) \cup (a; a + \epsilon) = \mathrm{U}^0_{\epsilon} = \mathrm{U}_{\epsilon} \setminus \{a\}$ -- проколотая.
+
+Будем говорить, что числовая последовательность $\{x_n\}$ имеет \textbf{предел, равный} $a$, если:
+\begin{equation}\label{eq:lim1}
+	\lim_{n \to \infty} x_n = a \Leftrightarrow \forall \mathrm{U}_{\epsilon}(a)\ \exists N (\mathrm{U}_{\epsilon}(a)) \colon \forall n \ge N \Rightarrow x_n \in \mathrm{U}_{\epsilon}(a)
+\end{equation}
+
+\begin{equation}\label{eq:lim2}
+	\lim_{n \to \infty} x_n = a \Leftrightarrow \forall \epsilon > 0\ \exists N (\epsilon) \colon \forall n \ge N \Rightarrow \mathopen| x_n - a \mathclose| < \epsilon
+\end{equation}
+
+Определения \eqref{eq:lim1} и \eqref{eq:lim2} эквивалентны. 
+
+Если существует $\lim\limits_{n \to \infty} x_n = a < \infty$, то $\{x_n\}$ -- \textbf{сходящаяся} последовательность. Иначе, если не существует  $\lim\limits_{n \to \infty} x_n$ или $\lim\limits_{n \to \infty} x_n = \infty$, то $\{x_n\}$ -- \textbf{расходящаяся}.
+\pagebreak
+
+
+
+
+\part*{Линейная алгебра \blfootnote{Все ответы составлены на основе \href{https://github.com/DimaTrushin}{материалов} Димы Трушина.}}
+
+\section*{1. Понятие линейного пространства. Определение линейно зависимости и независимости векторов. Размерность линейного пространства. Базис, координаты вектора, формулы преобразования координат при переходе от одного базиса к другому}
+
+\subsection*{Понятие линейного пространства}
+
+Следующее определение -- это пример определения с контекстом.
+Это означает, что прежде, чем его дать, мы должны зафиксировать некоторую информацию, которая необходима для нашего определения и без этой информации оно -- бессмысленный мусор.
+У определения векторного (линейного) пространства в качестве такого контекста выступает некоторое поле $F$.
+Это значит, что пока мы не зафиксировали какое-то поле, мы не можем говорить о векторных пространствах над полем $F$, а <<просто векторных пространств>> без указания какого-либо поля не существует.
+
+\begin{definition*}
+	\label{def::VectorSpace}
+	Пусть $F$ -- некоторое фиксированное поле.
+	Тогда векторное пространство над полем $F$ -- это следующий набор данных $(V, +, \cdot)$, где
+	\begin{itemize}
+		\item $V$ -- множество.
+		Элементы этого множества будут называться векторами.
+		
+		\item $+\colon V \times V \to V$ -- бинарная операция, то есть правило, действующее так: $(v,u)\mapsto v + u$, где $u,v \in V$.
+		
+		\item $\cdot \colon F \times V \to V$ -- бинарная операция, то есть правило, действующее так: $(\alpha, v)\mapsto \alpha v$, где $\alpha \in F$ и $v\in V$.
+	\end{itemize}
+	При этом эти данные удовлетворяют следующим $8$ аксиомам:
+	\begin{enumerate}
+		\item {\bf Ассоциативность сложения} Для любых векторов $u,v,w\in V$ верно $(u+v) + w = u + (v+w)$.
+		
+		\item {\bf Существование нулевого вектора} Существует такой вектор $0\in V$, что для любого $v\in V$ выполнено $0 + v = v + 0 = v$.
+		
+		\item {\bf Существование противоположного вектора} Для любого вектора $v\in V$ существует вектор $-v\in V$ такой, что $v + (-v) = (-v) + v = 0$.
+		
+		\item {\bf Коммутативность сложения} Для любых векторов $u,v \in V$ верно $u + v = v + u$.
+		
+		\item {\bf Согласованность умножения со сложением векторов} Для любого числа $\alpha \in F$ и любых векторов $u,v \in V$ верно $\alpha(v + u) = \alpha v + \alpha u$.
+		
+		\item {\bf Согласованность умножения со сложением чисел} Для любых чисел $\alpha, \beta\in F$ и любого вектора $v\in V$ верно $(\alpha + \beta)v = \alpha v + \beta v$.
+		
+		\item {\bf Согласованность умножения с умножением чисел} Для любых чисел $\alpha,\beta\in F$ и любого вектора $v\in V$ верно $(\alpha\beta)v = \alpha(\beta v)$.
+		
+		\item {\bf Нетривиальность} Для любого $v\in V$ верно $1 v = v$.%
+		\footnote{Здесь $1\in F$.}
+	\end{enumerate}
+\end{definition*}
+
+\paragraph{Примеры}
+
+\begin{enumerate}
+	\item Поле $F$ (или кто больше привык к вещественным числам $\mathbb R$) является векторным пространством над $F$ (соответственно над $\mathbb R$).
+	
+	\item Более обще, множество вектор-столбцов $F^n$ является векторным пространством над $F$.
+	
+	\item Множество матриц $\operatorname{M}_{m\,n}(F)$ является векторным пространством над $F$.
+	
+	\item Пусть $X$ -- произвольное множество, тогда множество функций $F(X, F) = \{f\colon X\to F\}$ является векторным пространством над $F$.
+	Надо лишь объяснить как складывать функции и умножать на элементы $F$.
+	Операции поточечные, пусть $f,g\colon X\to F$, тогда функция $(f+g)\colon X\to F$ действует по правилу $(f+g)(x) = f(x) + g(x)$.
+	Если $\alpha \in F$, то функция $(\alpha f)\colon X\to F$ действует по правилу $(\alpha f)(x) = \alpha f(x)$.
+	
+	\item Множество многочленов $F[x] = \{a_0+a_1x + \ldots + a_n x^n\mid a_i \in F,\,n\in \mathbb Z_{\geqslant 0}\}$.
+	Тут надо обратить внимание, что мы подразумеваем под многочленом.
+	Для нас многочлен -- это НЕ функция, многочлен -- это картинка вида $a_0 + a_1 x + \ldots + a_n x^n$.%
+	\footnote{Для любителей формализма, можете считать, что многочлен -- это конечная последовательность элементов $F$ вида $(a_0,\ldots,a_n)$, но длина последовательности может быть любой, включая нулевую.}
+	Складываются и умножаются эти картинки по одинаковым правилам.
+	Важно, что две такие картинки равны тогда и только тогда, когда у них равные коэффициенты.
+	Множество всех многочленов $F[x]$ является векторным пространством над $F$.
+\end{enumerate}
+
+\subsection*{Определение линейной зависимости и линейной независимости векторов}
+
+\subsubsection*{Линейные комбинации}
+
+\textbf{Мотивация}. Пусть у нас есть векторное пространство $V$ над полем $F$.
+Давайте поймем, а что вообще с ним можно делать?
+Во-первых, $V$ -- это множество.
+Значит из него можно брать элементы.
+Во-вторых, там есть операция умножения на числа, то есть любой вектор можно умножить на какое-то число.
+В-третьих, вектора можно складывать.
+Все это означает, что все что можно делать с векторным пространством, это набрать каких-то векторов из него $v_1,\ldots,v_n$ и написать выражение вида $\alpha_1 v_1 + \ldots + \alpha_n v_n$, для произвольных $\alpha_i\in F$.
+Это выражение будет задавать нам какой-то вектор из $V$.
+Как мы видим, особенно не разбежишься с разнообразием действий.
+Однако, важно, что с помощью подобных выражений можно вытащить абсолютно всю информацию из векторных пространств, которую только возможно.
+Именно поэтому все наше внимание будет посвящено выражениям такого вида, так как из них получится узнать все, что только можно про векторные пространства.
+
+\begin{definition*}
+	Пусть $V$ -- некоторое векторное пространство над полем $F$ и пусть $v_1,\ldots,v_n\in V$ -- некоторый набор векторов.
+	Тогда выражение вида $\alpha_1 v_1 +\ldots + \alpha_n v_n$, где $\alpha_i\in F$, называется линейной комбинацией $v_1,\ldots,v_n$.
+	Линейная комбинация называется тривиальной, если все $\alpha_i = 0$.
+	В противном случае она называется нетривиальной.
+\end{definition*}
+
+\begin{definition*}
+	Вектора $v_1,\ldots,v_n\in V$ называются линейно зависимыми, если существует их нетривиальная линейная комбинация равная нулю, то есть для каких-то $\alpha_i\in F$ (так что хотя бы один не равен нулю) выражение $\alpha_1 v_1+\ldots + \alpha_n v_n = 0$.
+	Подчеркнем, что вектора линейно независимы, если из равенства $\alpha_1 v_1 + \ldots + \alpha_n v_n = 0$ следует, что все $\alpha_i = 0$.
+\end{definition*}
+
+\paragraph{Примеры}
+
+\begin{enumerate}
+	\item Вектор $0$ всегда линейно зависим.
+	
+	\item Вектор $v\in V$ линейно зависим тогда и только тогда, когда он равен нулю.
+	
+	\item Вектора $v_1, v_2 \in V$ линейно зависимы тогда и только тогда, когда они пропорциональны (то есть один из них равен другому умноженному на элемент поля).
+\end{enumerate}
+
+Заметим, что если множество векторов $v_1,\ldots, v_k$ линейно независимо, то и любое его подмножество тоже линейно независимо.
+Потому интересно не уменьшать, а увеличивать линейно независимые подмножества векторов.
+Линейно независимое множество векторов $v_1,\ldots, v_k$ называется максимальным, если при добавлении к нему любого вектора оно становится линейно зависимым.
+\pagebreak
+
+\section*{2. Матрицы и действия над ними. Детерминант квадратной матрицы. Ранг матрицы. Эквивалентность его двух определений в терминах линейной независимости строк (или столбцов) матрицы и в терминах неравенства нулю миноров}
+
+Матрица -- это прямоугольная таблица чисел
+\begin{equation*}
+A=
+\begin{pmatrix}
+	a_{11} & \ldots & a_{1n} \\
+	\vdots & \ddots & \vdots \\
+	a_{m1} & \ldots & a_{mn}
+\end{pmatrix}, \text{ где } a_{ij} \in \mathbb{R}
+\end{equation*}
+
+Множество всех матриц с $m$ строками и $n$ столбцами обозначается $\MatrixDim{m}{n}$. Множество квадратных матриц размера $n$ будем обозначать $\Matrix{n}$. Матрицы с одним столбцом или одной строкой называются векторами (вектор-столбцами и вектор-строками соответственно). Множество всех векторов с $n$ координатами обозначается $\Vector{n}$. По умолчанию будем считать, что наши вектора -- это вектор-столбцы.
+
+\subsection*{Операции с матрицами}
+
+\subsubsection*{1. Сложение} Пусть $A, B \in \MatrixDim{m}{n}$. Тогда сумма $A + B$ определяется покомпонентно, т.е. $C = A + B$ и $c_{ij} = a_{ij} + b_{ij}$. В явном матричном виде:
+
+\[
+\begin{pmatrix}
+	a_{11} & \ldots & a_{1n} \\
+	\vdots & \ddots & \vdots \\
+	a_{m1} & \ldots & a_{mn}
+\end{pmatrix}
++
+\begin{pmatrix}
+	b_{11} & \ldots & b_{1n} \\
+	\vdots & \ddots & \vdots \\
+	b_{m1} & \ldots & b_{mn}
+\end{pmatrix}
+=
+\begin{pmatrix}
+	a_{11}+b_{11} & \ldots & a_{1n}+b_{1n} \\
+	\vdots & \ddots & \vdots \\
+	a_{m1}+b_{m1} & \ldots & a_{mn}+b_{mn}
+\end{pmatrix}
+\]
+
+Складывать можно только матрицы одинакового размера.
+
+\subsubsection*{2. Умножение на скаляр} Если $\lambda\in \mathbb R$ и $A\in \MatrixDim{m}{n}$, то $\lambda A$ определяется так: $\lambda A = C$, где $c_{ij} = \lambda a_{ij}$ или
+
+\[
+\lambda
+\begin{pmatrix}
+	a_{11}&\ldots& a_{1n}\\
+	\vdots&\ddots&\vdots\\
+	a_{m1}& \ldots &a_{mn}
+\end{pmatrix}
+=
+\begin{pmatrix}
+	\lambda a_{11}&\ldots& \lambda a_{1n}\\
+	\vdots&\ddots&\vdots\\
+	\lambda a_{m1}& \ldots &\lambda a_{mn}
+\end{pmatrix}
+\]
+
+\subsubsection*{3. Умножение матриц} Пусть $A\in\MatrixDim{m}{n}$ и $B\in\MatrixDim{n}{k}$, то произведение $AB\in\MatrixDim{m}{k}$ определяется так: $AB = C$, где $c_{ij} = \sum_{t=1}^n a_{it}b_{tj}$ или
+
+\[
+\begin{pmatrix}
+	a_{11}&\ldots& a_{1n}\\
+	\vdots&\ddots&\vdots\\
+	a_{m1}& \ldots &a_{mn}
+\end{pmatrix}
+\begin{pmatrix}
+	b_{11}&\ldots& b_{1k}\\
+	\vdots&\ddots&\vdots\\
+	b_{n1}& \ldots &b_{nk}
+\end{pmatrix}
+=
+\begin{pmatrix}
+	\sum_{t=1}^n a_{1t}b_{t1}&\ldots& \sum_{t=1}^n a_{1t}b_{tk}\\
+	\vdots&\ddots&\vdots\\
+	\sum_{t=1}^n a_{mt}b_{t1}& \ldots &\sum_{t=1}^n a_{mt}b_{tk}
+\end{pmatrix}
+\]
+
+На умножение матриц можно смотреть следующим образом. Чтобы получить коэффициент $c_{ij}$ надо, из матрицы $A$ взять $i$-ю строку (она имеет длину $n$), а из матрицы $B$ взять $j$-ый столбец (он тоже имеет длину $n$). Тогда их надо скалярно перемножить и результат подставить в $c_{ij}$.
+
+\subsubsection*{4. Транспонирование} Пусть $A$ -- это матрица вида
+
+\[
+\begin{pmatrix}
+	{a_{11}}&{\ldots}&{a_{1n}}\\
+	{\vdots}&{\ddots}&{\vdots}\\
+	{a_{m1}}&{\ldots}&{a_{mn}}\\
+\end{pmatrix}\quad \text{или}\quad
+\begin{pmatrix}
+	{a_{11}}&{a_{12}}&{a_{13}}\\
+	{a_{21}}&{a_{22}}&{a_{23}}
+\end{pmatrix}\quad \text{или}\quad
+\begin{pmatrix}
+	{x_1}\\
+	{x_2}\\
+	{x_3}\\
+\end{pmatrix}
+\]
+
+Определим транспонированную матрицу $A^t = (a'_{ij})$ так: $a'_{ij} = a_{ji}$. Наглядно, транспонированная матрица для приведенных выше
+
+\[
+\begin{pmatrix}
+	{a_{11}}&{\ldots}&{a_{m1}}\\
+	{\vdots}&{\ddots}&{\vdots}\\
+	{a_{1n}}&{\ldots}&{a_{mn}}\\
+\end{pmatrix}\quad\text{или}\quad
+\begin{pmatrix}
+	{a_{11}}&{a_{21}}\\
+	{a_{12}}&{a_{22}}\\
+	{a_{13}}&{a_{23}}\\
+\end{pmatrix}\quad \text{или}\quad
+\begin{pmatrix}
+	{x_1}&{x_2}&{x_3}\\
+\end{pmatrix}
+\]
+
+
+\subsubsection*{Свойства операций}
+
+\begin{enumerate}
+	\item {\bf Ассоциативность сложения} $(A + B) + C = A + (B + C)$ для любых $A,B,C\in \MatrixDim{m}{n}$
+	\item {\bf Существование нейтрального элемента для сложения} Существует единственная матрица $0\in\MatrixDim{m}{n}$ обладающая следующим свойством $A + 0 = 0 + A = A$ для всех $A\in\MatrixDim{m}{n}$. Такая матрица целиком заполнена нулями.
+	
+	\item {\bf Коммутативность сложения} $A + B = B + A$ для любых $A,B\in\MatrixDim{m}{n}$.
+	
+	\item {\bf Наличие обратного по сложению} Для любой матрицы $A\in\MatrixDim{m}{n}$ существует матрица $-A$ такая, что $A + (-A) = (-A) + A = 0$. Такая матрица единственная и состоит из элементов $-a_{ij}$.
+	
+	\item {\bf Ассоциативность умножения} Для любых матриц $A\in\MatrixDim{m}{n}$, $B\in\MatrixDim{n}{k}$ и $C\in\MatrixDim{k}{t}$ верно $(AB)C = A(BC)$.
+	
+	\item {\bf Существование нейтрального элемента для умножения} Для каждого $k$ существует единственная матрица $E\in\Matrix{k}$ такая, что для любой $A\in\MatrixDim{m}{n}$ верно $E A = A E = A$. У такой матрицы $E_{ii} = 1$, а $E_{ij} = 0$. Когда нет путаницы матрицу $E$ обозначают через $1$.
+	
+	\item {\bf Дистрибутивность умножения относительно сложения} Для любых матриц $A,B\in\MatrixDim{m}{n}$ и $C\in\MatrixDim{n}{k}$ верно $(A + B)C = AC + B C$. Аналогично, для любых $A\in\MatrixDim{m}{n}$ и $B,C\in\MatrixDim{n}{k}$ верно $A(B+C) = AB + AC$.
+	
+	\item {\bf Умножение на числа ассоциативно} Для любых $\lambda,\mu \in\mathbb R$ и любой матрицы $A\in\MatrixDim{m}{n}$ верно $\lambda(\mu A) = (\lambda \mu) A$. Аналогично для любого $\lambda \in \mathbb R$ и любых $A\in\MatrixDim{m}{n}$ и $B\in \MatrixDim{n}{k}$ верно $\lambda(AB) = (\lambda A) B$.
+	
+	\item {\bf Умножение на числа дистрибутивно относительно сложения матриц и сложения чисел} Для любых $\lambda,\mu\in \mathbb R$ и $A\in \MatrixDim{m}{n}$ верно $(\lambda + \mu)A = \lambda A +\mu A$. Аналогично, для любого $\lambda\in\mathbb R$ и $A,B\in\MatrixDim{m}{n}$ верно $\lambda(A+B) = \lambda A + \lambda B$.
+	
+	\item {\bf Умножение на скаляр нетривиально} Если $1\in\mathbb R$, то для любой матрицы $A\in \MatrixDim{m}{n}$ верно $1 A = A$.
+	
+	\item {\bf Умножение на скаляр согласовано с умножением матриц} Для любого $\lambda \in \mathbb R$ и любых $A\in\MatrixDim{m}{n}$ и $B\in\MatrixDim{n}{k}$ верно $\lambda(AB) = (\lambda A)B = A (\lambda B)$.
+\end{enumerate}
+
+
+\subsection*{Детерминант}
+
+Детерминант (или определитель) существует только для квадратных матриц. Классическое определение через перестановки. Пусть $A\in\Matrix{n}$ положим
+
+\[
+\det A = \sum_{\sigma\in\Sym{n}} \sgn(\sigma) a_{1\sigma(1)}\cdot \ldots \cdot a_{n\sigma(n)}
+\]
+
+Это и есть определитель матрицы $A$. Давайте поясним структуру формулы. Внутри стоят произведения вида $a_{1\sigma(1)}\cdot \ldots \cdot a_{n\sigma(n)}$, где первый индекс идет по-порядку, то есть мы выбираем по элементу из каждой строки. Второй индекс имеет вид $\sigma(i)$, где $\sigma$ -- перестановка, то есть эти индексы тоже не повторяются, то есть мы выбираем элементы так, что все они из разных строк и столбцов. После этого элементы перемножаются между собой, умножаются на знак $\sigma$ и все это радостно складывается в одну большую сумму из $n!$ слагаемых (таково количество перестановок).
+
+Как это определение связано с ориентированным объемом. Думать про это надо так: пусть $A = (A_1\mid \ldots\mid A_n)\in\Matrix{n}$ составлена из столбцов $A_i\in\Vector{n}$. Тогда $\det A$ -- это ориентированный объем $n$-мерного параллелепипеда натянутого на вектора $A_1,\ldots,A_n$.
+
+\paragraph{Примеры} 
+\begin{enumerate}
+	\item Если $A\in \Matrix{1} = \mathbb R$, то $\det A = A$.
+	\item Если $A \in \Matrix{2}$ имеет вид $A = \left(\begin{smallmatrix}{a}&{b}\\{c}&{d}\end{smallmatrix}\right)$, то $\det A = ad - bc$. Графически: главная диагональ минус побочная.
+	\item Если $A\in \Matrix{3}$ имеет вид $A = \left(\begin{smallmatrix}{a_{11}}&{a_{12}}&{a_{13}}\\{a_{21}}&{a_{22}}&{a_{23}}\\{a_{31}}&{a_{32}}&{a_{33}}\end{smallmatrix}\right)$, то определитель получается из $6$ слагаемых три из них с $+$ три с $-$. Графически слагаемые можно изобразить так:
+	\[
+	\det A = 
+	+
+	\left(
+	\parbox{6pt}{
+		\xymatrix@R=6pt@C=6pt{
+			{}\ar@{-}[ddrr]&{}&{}\\
+			{}&{}&{}\\
+			{}&{}&{}\\
+	}}
+	\right) +
+	\left(
+	\parbox{6pt}{
+		\xymatrix@R=6pt@C=6pt{
+			{}&{}\ar@{-}[dr]&{}\\
+			{}&{}&{}\ar@{-}[dll]\\
+			{}\ar@{-}[uur]&{}&{}\\
+	}}
+	\right) +
+	\left(
+	\parbox{6pt}{
+		\xymatrix@R=6pt@C=6pt{
+			{}&{}&{}\ar@{-}[ddl]\\
+			{}\ar@{-}[urr]&{}&{}\\
+			{}&{}\ar@{-}[ul]&{}\\
+	}}
+	\right) -
+	\left(
+	\parbox{6pt}{
+		\xymatrix@R=6pt@C=6pt{
+			{}&{}&{}\ar@{-}[ddll]\\
+			{}&{}&{}\\
+			{}&{}&{}\\
+	}}
+	\right) -
+	\left(
+	\parbox{6pt}{
+		\xymatrix@R=6pt@C=6pt{
+			{}&{}\ar@{-}[ddr]&{}\\
+			{}\ar@{-}[ur]&{}&{}\\
+			{}&{}&{}\ar@{-}[ull]\\
+	}}
+	\right) -
+	\left(
+	\parbox{6pt}{
+		\xymatrix@R=6pt@C=6pt{
+			{}\ar@{-}[drr]&{}&{}\\
+			{}&{}&{}\ar@{-}[dl]\\
+			{}&{}\ar@{-}[uul]&{}\\
+	}}
+	\right) 
+	\]
+	Точная формула\footnote{Начиная с этого момента можно забыть честное определение. Оно почти никогда не нужно для использования, пригодятся лишь его свойства. Определитель никогда не считают по определению. Это слишком долго.}
+	\[
+	\det A = a_{11}a_{22}a_{33} + a_{12}a_{23}a_{31} + a_{13}a_{21}a_{32} - 
+	a_{13}a_{22}a_{31} - a_{12}a_{21}a_{33} - a_{11}a_{23}a_{32}
+	\]
+\end{enumerate}
+
+\subsubsection*{Свойства определителя}
+
+Считать определитель по явной формуле весьма проблематично. Слишком уж много слагаемых. Потому по определению его можно вычислить лишь для очень специальных матриц. Для произвольных матриц используются некоторые полезные свойства, с помощью которых их определители сводятся к определителям специальных матриц.
+
+Пусть $A\in \Matrix{n}$ -- матрица, тогда на нее можно смотреть как на набор из $n$ столбцов $A = (A_1|\ldots|A_n)$. Тогда определитель $\det (A)$ можно рассматривать, как функцию от столбцов матрицы $A$, то есть $\det (A) = \det(A_1|\ldots|A_n)$. Думаю таким образом, мы можем сформулировать следующие свойства:
+
+\begin{enumerate}
+	\item $\det(A_1|\ldots|A_i + A_i'|\ldots|A_n) = \det(A_1|\ldots|A_i|\ldots|A_n) + \det(A_1|\ldots|A_i'|\ldots|A_n)$. Например,
+	\[
+	\det
+	\begin{pmatrix}
+		{1}&{3}\\
+		{2}&{7}
+	\end{pmatrix}
+	=
+	\det
+	\left(\left.
+	\begin{pmatrix}
+		{1}\\{2}
+	\end{pmatrix}
+	\right|
+	\begin{pmatrix}
+		{3}\\{7}
+	\end{pmatrix}
+	\right)
+	=
+	\det
+	\left(\left.
+	\begin{pmatrix}
+		{1}\\{2}
+	\end{pmatrix}
+	\right|
+	\begin{pmatrix}
+		{1}\\{3}
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+		{2}\\{4}
+	\end{pmatrix}
+	\right)
+	=
+	\det
+	\begin{pmatrix}
+		{1}&{1}\\
+		{2}&{3}
+	\end{pmatrix}
+	+
+	\det
+	\begin{pmatrix}
+		{1}&{2}\\
+		{2}&{4}
+	\end{pmatrix}
+	\]
+	
+	
+	\item $\det(A_1|\ldots|A_i|\ldots|A_j|\ldots|A_n) = -\det(A_1|\ldots|A_j|\ldots|A_i|\ldots|A_n)$. То есть если поменять местами два столбца, то определитель изменит знак, например,
+	\[
+	\det
+	\begin{pmatrix}
+		{1}&{3}\\
+		{2}&{7}
+	\end{pmatrix}
+	=-
+	\det
+	\begin{pmatrix}
+		{3}&{1}\\
+		{7}&{2}
+	\end{pmatrix}
+	\]
+	
+	
+	\item $\det(A_1|\ldots|A'|\ldots|A'|\ldots|A_n) = 0$, то есть если у матрицы есть два одинаковых столбца, то определитель автоматически равен нулю, например
+	\[
+	\det
+	\begin{pmatrix}
+		{1}&{0}\\
+		{2}&{0}
+	\end{pmatrix} = 0
+	\]
+	
+	\item $\det(A_1|\ldots|\lambda A_i|\ldots|A_n)  = \lambda \det(A_1|\ldots|A_i|\ldots|A_n) $. То есть, если один столбец умножить на одно и то же число, то весь определитель умножится на это число, например,
+	\[
+	\det
+	\begin{pmatrix}
+		{1}&{3}\\
+		{2}&{9}
+	\end{pmatrix}
+	=
+	3
+	\det
+	\begin{pmatrix}
+		{1}&{1}\\
+		{2}&{3}
+	\end{pmatrix}
+	\]
+	
+	\item $\det(A_1|\ldots|A_i|\ldots|A_j|\ldots|A_n) = \det(A_1|\ldots|A_i|\ldots|A_j + \lambda A_i|\ldots|A_n)$. То есть, если к одному столбцу матрицы прибавить другой умноженный на коэффициент, то определитель не изменится, например
+	\[
+	\det
+	\begin{pmatrix}
+		{1}&{3}\\
+		{2}&{7}
+	\end{pmatrix}
+	=
+	\det
+	\left(\left.
+	\begin{pmatrix}
+		{1}\\{2}
+	\end{pmatrix}
+	\right|
+	\begin{pmatrix}
+		{3}\\{7}
+	\end{pmatrix}
+	\right)
+	=
+	\det
+	\left(\left.
+	\begin{pmatrix}
+		{1}\\{2}
+	\end{pmatrix}
+	\right|
+	\begin{pmatrix}
+		{3}\\{7}
+	\end{pmatrix}
+	+
+	2
+	\begin{pmatrix}
+		{1}\\{2}
+	\end{pmatrix}
+	\right)
+	=
+	\det
+	\left(\left.
+	\begin{pmatrix}
+		{1}\\{2}
+	\end{pmatrix}
+	\right|
+	\begin{pmatrix}
+		{5}\\{11}
+	\end{pmatrix}
+	\right)
+	=
+	\det
+	\begin{pmatrix}
+		{1}&{5}\\
+		{2}&{11}
+	\end{pmatrix}
+	\]
+	
+	\item $\det A = \det A^t$. То есть определитель матрицы равен определителю транспонированной матрицы. А значит, все свойства сформулированные выше для столбцов автоматически верны и для строк.
+	
+	\item Определитель треугольной матрицы
+	\[
+	\det
+	\begin{pmatrix}
+		{\lambda_1}&{*}&{\ldots}&{*}\\
+		{}&{\lambda_2}&{\ldots}&{*}\\
+		{}&{}&{\ddots}&{\vdots}\\
+		{}&{}&{}&{\lambda_n}\\
+	\end{pmatrix}
+	=
+	\det
+	\begin{pmatrix}
+		{\lambda_1}&{}&{}&{}\\
+		{*}&{\lambda_2}&{}&{}\\
+		{\vdots}&{\vdots}&{\ddots}&{}\\
+		{*}&{*}&{\ldots}&{\lambda_n}\\
+	\end{pmatrix}
+	=
+	\lambda_1\lambda_2 \ldots \lambda_n
+	\]
+	То есть у треугольной матрицы определитель равен произведению ее диагональных элементов. В частности $\det E = 1$ и $\det(\lambda E) = \lambda^n$.
+\end{enumerate}
+
+\subsubsection*{Вычисление определителя с помощью элементарных преобразований}
+
+Из сформулированных свойств выше следует, что определитель можно считать так: надо привести матрицу $A$ элементарными преобразованиями к треугольному виду и по пути запоминать некоторые коэффициенты, после чего надо перемножить эти коэффициенты с определителем треугольной матрицы. Давайте продемонстрируем на примере, будем приводить матрицу к ступенчатому виду элементарными преобразованиями строк
+\begin{gather*}
+	\det
+	\begin{pmatrix}
+		{0}&{1}&{1}\\
+		{-1}&{2}&{1}\\
+		{1}&{1}&{-1}\\
+	\end{pmatrix}
+	=
+	-
+	\det
+	\begin{pmatrix}
+		{1}&{1}&{-1}\\
+		{-1}&{2}&{1}\\
+		{0}&{1}&{1}\\
+	\end{pmatrix}
+	=
+	-\det
+	\begin{pmatrix}
+		{1}&{1}&{-1}\\
+		{0}&{3}&{0}\\
+		{0}&{1}&{1}\\
+	\end{pmatrix}
+	=\\=
+	-3
+	\det
+	\begin{pmatrix}
+		{1}&{1}&{-1}\\
+		{0}&{1}&{0}\\
+		{0}&{1}&{1}\\
+	\end{pmatrix}
+	=-3
+	\det
+	\begin{pmatrix}
+		{1}&{1}&{-1}\\
+		{0}&{1}&{0}\\
+		{0}&{0}&{1}\\
+	\end{pmatrix}
+	=-3
+\end{gather*}
+
+
+\subsubsection*{Связь определителя с произведением}
+
+Для определителя верны следующие формулы
+\begin{enumerate}
+	\item $\det(AB) = \det(A) \det(B)$
+	
+	\item $\det(A^{-1}) = \det(A)^{-1}$
+	
+	\item Пусть $A\in \Matrix{n}$, $C\in \Matrix{m}$ и $B\in \MatrixDim{n}{m}$, тогда
+	\[
+	\det
+	\begin{pmatrix}
+		{A}&{B}\\
+		{0}&{C}
+	\end{pmatrix}
+	=
+	\det A \det C
+	\]
+\end{enumerate}
+
+Оказывается, что определитель является единственной функцией $\phi\colon \Matrix{n}\to \mathbb R$ такой, что
+\begin{enumerate}
+	\item $\phi(AB) = \phi(A) \phi(B)$
+	\item 
+	$
+	\phi
+	\begin{pmatrix}
+		{1}&{}&{}&{}\\
+		{}&{\ddots}&{}&{}\\
+		{}&{}&{1}&{}\\
+		{}&{}&{}&{\lambda}\\
+	\end{pmatrix}
+	=\lambda
+	$
+\end{enumerate}
+
+\subsubsection*{Миноры и алгебраические дополнения}
+
+Пусть $A\in \Matrix{n}$ с элементами $a_{ij}$. Рассмотрим матрицу $D_{ij}\in\Matrix{n-1}$ полученную из $A$ вычеркиванием $i$-ой строки и $j$-го столбца. Определитель матрицы $D_{ij}$ обозначается $M_{ij}$ и называется {\it минором} матрицы $A$ или $ij$-минором для определенности. Число $(-1)^{i+j} M_{ij}$ называется алгебраическим дополнением элемента $a_{ij}$ и обозначается $A_{ij}$.
+
+Покажем как это все выглядит на картинках.  Если мы представим матрицу $A$ в виде
+\[
+A =
+\left(
+\begin{array}{c|c|c}
+	\cline{2-2}
+	{X_{ij}}&{
+		\begin{array}{c}
+			{*}\\{\vdots}
+		\end{array}
+	}&{Y_{ij}}\\
+	\hline
+	\multicolumn{1}{|c|}{
+		\begin{array}{cc}
+			{*}&{\ldots}
+		\end{array}
+	}&{a_{ij}}&\multicolumn{1}{c|}{
+		\begin{array}{cc}
+			{\ldots}&{*}
+		\end{array}
+	}\\
+	\hline
+	{Z_{ij}}&{
+		\begin{array}{c}
+			{\vdots}\\{*}
+		\end{array}
+	}&{W_{ij}}\\
+	\cline{2-2}
+\end{array}
+\right)
+\]
+Тогда
+\[
+D_{ij} =
+\begin{pmatrix}
+	{X_{ij}}&{Y_{ij}}\\
+	{Z_{ij}}&{W_{ij}}\\
+\end{pmatrix},\quad
+M_{ij} = 
+\det
+\begin{pmatrix}
+	{X_{ij}}&{Y_{ij}}\\
+	{Z_{ij}}&{W_{ij}}\\
+\end{pmatrix}\quad\text{и}\quad
+A_{ij} =
+(-1)^{i+j}
+\det
+\begin{pmatrix}
+	{X_{ij}}&{Y_{ij}}\\
+	{Z_{ij}}&{W_{ij}}\\
+\end{pmatrix}
+\]
+
+\subsubsection*{Разложение определителя по строке (столбцу)}
+
+
+\textbf{Разложение по столбцу}. Для матрицы $A\in \Matrix{n}$ и любого $k$ с условием $1\leqslant k \leqslant n$ верна формула $\det A = \sum_{i = 1} ^ n a_{ik} A_{ik}$. Здесь $A_{ij}$ -- алгебраическое дополнение $a_{ij}$. Например, разложим по второму столбцу
+\[
+\det\begin{pmatrix}
+	{1}&{2}&{3}\\
+	{3}&{2}&{1}\\
+	{-1}&{0}&{1}\\
+\end{pmatrix}=
+2 (-1)^{1 + 2} 
+\det
+\begin{pmatrix}
+	{3}&{1}\\
+	{-1}&{1}\\
+\end{pmatrix}+
+2 (-1)^{2+2}
+\det
+\begin{pmatrix}
+	{1}&{3}\\
+	{-1}&{1}\\
+\end{pmatrix} +
+0 (-1)^{3+2}
+\det
+\begin{pmatrix}
+	{1}&{3}\\
+	{3}&{1}
+\end{pmatrix}
+\]
+
+Для разложения по строкам верны ровно те же самые формулы. Их можно получить просто перейдя к транспонированной матрице.
+\newpage
+
+
+
+
+\section*{3. Системы линейных алгебраических уравнений. Решение однородной системы. Решение неоднородной системы линейных уравнений. Критерий совместности Кронекера-Капелли}
+
+Общий вид СЛУ и ее однородная версия (ОСЛУ):
+
+\[
+\left\{
+\begin{aligned}
+	a_{11}x_1 + &\ldots + a_{1n}x_n = b_1\\
+	&\ldots \\
+	a_{m1}x_1 + &\ldots + a_{mn}x_n = b_m
+\end{aligned}
+\right.\quad\quad
+\left\{
+\begin{aligned}
+	a_{11}x_1 + &\ldots + a_{1n}x_n = 0\\
+	&\ldots \\
+	a_{m1}x_1 + &\ldots + a_{mn}x_n = 0
+\end{aligned}
+\right.
+\]
+
+\subsection*{Коэффициенты}
+
+Где живут коэффициенты $a_{ij}$ и $b_j$? Варианты:
+\begin{itemize}
+	\item Вещественные числа $\mathbb R$
+	\item Комплексные числа $\mathbb C$
+	\item Рациональные числа $\mathbb Q$
+\end{itemize}
+Для решения СЛУ {\bf НЕ} имеет значения откуда берутся коэффициенты, так как решения будут лежать там же. Потому мы будем работать с числами из $\mathbb R$.
+
+\subsection*{Матрицы связанные со СЛУ}
+
+Для каждой СЛУ введем следующие обозначения:
+\[
+A= 
+\begin{pmatrix}
+	a_{11}&\ldots& a_{1n}\\
+	\vdots&\ddots&\vdots\\
+	a_{m1}& \ldots &a_{mn}
+\end{pmatrix}\quad
+b = 
+\begin{pmatrix}
+	b_1\\
+	\vdots\\
+	b_m
+\end{pmatrix} \quad
+x =
+\begin{pmatrix}
+	x_1\\
+	\vdots\\
+	x_n
+\end{pmatrix}\quad
+(A|b) =
+\left(\left.
+\begin{matrix}
+	a_{11}&\ldots&a_{1n}\\
+	\vdots&\ddots&\vdots\\
+	a_{m1}&\ldots&a_{mn}\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	b_1\\
+	\vdots\\
+	b_m\\
+\end{matrix}\right)
+\]
+Названия:
+\begin{itemize}
+	\item $A$ -- матрица системы
+	\item $b$ -- вектор правой части
+	\item $(A|b)$ -- расширенная матрица системы
+	\item $x$ -- вектор решений
+\end{itemize}
+Будем кратко записывать СЛУ и ее однородную версию так: $Ax = b$ и $Ax = 0$.
+\subsection*{Количество решений}
+Случай одного уравнения и одной неизвестной
+\begin{itemize}
+	\item $x = 0$ -- одно решение
+	\item $0x = 0$ -- бесконечное число решений
+	\item $0x = 1$ -- нет решений
+\end{itemize}
+
+
+\subsection*{Элементарные преобразования}
+\begin{align*}
+	\text{I тип: }&
+	\left(\left.
+	\begin{matrix}
+		a_{11}&\ldots&a_{1n}\\
+		a_{i1}&\ldots&a_{in}\\
+		a_{j1}&\ldots&a_{jn}\\
+		a_{m1}&\ldots&a_{mn}
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_i\\
+		b_j\\
+		b_m
+	\end{matrix}
+	\right)
+	\mapsto
+	\left(\left.
+	\begin{matrix}
+		a_{11}&\ldots&a_{1n}\\
+		a_{i1}&\ldots&a_{in}\\
+		a_{j1} + \lambda a_{i1}&\ldots&a_{jn}+ \lambda a_{in}\\
+		a_{m1}&\ldots&a_{mn}
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_i\\
+		b_j+ \lambda b_i\\
+		b_m\\
+	\end{matrix}
+	\right)
+	\quad i\neq j
+	\\
+	\text{II тип: }&
+	\left(\left.
+	\begin{matrix}
+		a_{11}&\ldots&a_{1n}\\
+		a_{i1}&\ldots&a_{in}\\
+		a_{j1}&\ldots&a_{jn}\\
+		a_{m1}&\ldots&a_{mn}
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_i\\
+		b_j\\
+		b_m
+	\end{matrix}
+	\right)
+	\mapsto
+	\left(\left.
+	\begin{matrix}
+		a_{11}&\ldots&a_{1n}\\
+		a_{j1}&\ldots&a_{jn}\\
+		a_{i1}&\ldots&a_{in}\\
+		a_{m1}&\ldots&a_{mn}
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_j\\
+		b_i\\
+		b_m
+	\end{matrix}
+	\right)
+	\\
+	\text{III тип: }&
+	\left(\left.
+	\begin{matrix}
+		a_{11}&\ldots&a_{1n}\\
+		a_{i1}&\ldots&a_{in}\\
+		a_{m1}&\ldots&a_{mn}
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_i\\
+		b_m
+	\end{matrix}
+	\right)
+	\mapsto
+	\left(\left.
+	\begin{matrix}
+		a_{11}&\ldots&a_{1n}\\
+		\lambda a_{i1}&\ldots&\lambda a_{in}\\
+		a_{m1}&\ldots&a_{mn}
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		\lambda b_i\\
+		b_m
+	\end{matrix}
+	\right)
+	\quad \lambda \neq 0
+\end{align*}
+\subsection*{Приведение к ступенчатому виду (алгоритм Гаусса)}
+Основной способ решения СЛУ -- привести ее элементарными преобразованиями к простому виду, где множество решений очевидно.\footnote{Данный метод является самым быстрым возможным как для написания программ, так и для ручного вычисления. При вычислениях руками, однако, полезно местами пользоваться <<локальными оптимизациями>>, то есть, если вы видите, что какая-то хитрая комбинация строк сильно упростит вид системы, то сделайте ее.}
+
+Разберем типичный ход алгоритма Гаусса на примере $3$ уравнений и $4$ неизвестных.\footnote{При переходе от одной матрицы к другой я новым коэффициентам даю старые имена, чтобы не захламлять текст новыми обозначениями.}
+\subsubsection*{Прямой ход алгоритма Гаусса}
+\begin{align*}
+	\left(\left.
+	\begin{matrix}
+		a_{11}& a_{12}&a_{13}& a_{14}\\
+		a_{21}& a_{22}&a_{23}& a_{24}\\
+		a_{31}& a_{32}&a_{33}& a_{34}\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&
+	\quad 2\text{-я строка }-\frac{a_{21}}{a_{11}}\cdot1\text{-я строка}\quad\\
+	\left(\left.
+	\begin{matrix}
+		a_{11}& a_{12}&a_{13}& a_{14}\\
+		0& a_{22}&a_{23}& a_{24}\\
+		a_{31}& a_{32}&a_{33}& a_{34}\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&
+	\quad 3\text{-я строка }-\frac{a_{31}}{a_{11}}\cdot1\text{-я строка}\quad\\
+	\left(\left.
+	\begin{matrix}
+		a_{11}& a_{12}&a_{13}& a_{14}\\
+		0& a_{22}&a_{23}& a_{24}\\
+		0& a_{32}&a_{33}& a_{34}\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&
+	\quad 3\text{-я строка }-\frac{a_{32}}{a_{22}}\cdot2\text{-я строка}\quad\\
+	\left(\left.
+	\begin{matrix}
+		a_{11}& a_{12}&a_{13}& a_{14}\\
+		0& a_{22}&a_{23}& a_{24}\\
+		0& 0&a_{33}& a_{34}\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&
+\end{align*}
+В результате данного хода какие-то коэффициенты, например $a_{33}$, могли занулиться, потому возможны следующие принципиально другие случаи\footnote{Это не полный список всех случаев.}
+\[
+\left(\left.
+\begin{matrix}
+	\underline{a_{11}}& a_{12}&a_{13}& a_{14}\\
+	0& \underline{a_{22}}&a_{23}& a_{24}\\
+	0& 0&0& \underline{a_{34}}\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	b_1\\
+	b_2\\
+	b_3\\
+\end{matrix}
+\right)
+\quad
+\left(\left.
+\begin{matrix}
+	\underline{a_{11}}& a_{12}&a_{13}& a_{14}\\
+	0& 0&\underline{a_{23}}& a_{24}\\
+	0& 0&0& \underline{a_{34}}\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	b_1\\
+	b_2\\
+	b_3\\
+\end{matrix}
+\right)
+\quad
+\left(\left.
+\begin{matrix}
+	\underline{a_{11}}& a_{12}&a_{13}& a_{14}\\
+	0& \underline{a_{22}}&a_{23}& a_{24}\\
+	0& 0&0& 0\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	b_1\\
+	b_2\\
+	\underline{b_3}\\
+\end{matrix}
+\right)
+\quad
+\left(\left.
+\begin{matrix}
+	\underline{a_{11}}& a_{12}&a_{13}& a_{14}\\
+	0& \underline{a_{22}}&a_{23}& a_{24}\\
+	0& 0&0& 0\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	b_1\\
+	b_2\\
+	0\\
+\end{matrix}
+\right)
+\]
+Подчеркнутые элементы считаются не равными нулю. В ступенчатом виде все переменные (и соответственно коэффициенты перед ними) делятся на главные и неглавные. Главные коэффициенты -- это первые ненулевые коэффициенты в строке (подчеркнутые). Переменные при них называются главными, остальные ненулевые коэффициенты и переменные -- неглавные или свободными.
+
+
+\subsubsection*{Обратный ход алгоритма Гаусса}
+Разберем типичный обратный ход алгоритма Гаусса. Подчеркнутые элементы считаются не равными нулю.
+\begin{align*}
+	\left(\left.
+	\begin{matrix}
+		\underline{a_{11}}& a_{12}&a_{13}& a_{14}\\
+		0& \underline{a_{22}}&a_{23}& a_{24}\\
+		0& 0&\underline{a_{33}}& a_{34}\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&
+	\quad \text{разделить }i\text{-ю строку на }a_{ii}\\
+	\left(\left.
+	\begin{matrix}
+		1& a_{12}&a_{13}& a_{14}\\
+		0& 1&a_{23}& a_{24}\\
+		0& 0&1& a_{34}\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&
+	\quad 2\text{-я строка }-a_{23}\cdot3\text{-я строка}\\
+	\left(\left.
+	\begin{matrix}
+		1& a_{12}&a_{13}& a_{14}\\
+		0& 1&0& a_{24}\\
+		0& 0&1& a_{34}\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&
+	\quad 1\text{-я строка }-a_{13}\cdot3\text{-я строка}\\
+	\left(\left.
+	\begin{matrix}
+		1& a_{12}&0& a_{14}\\
+		0& 1&0& a_{24}\\
+		0& 0&1& a_{34}\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&
+	\quad 1\text{-я строка }-a_{12}\cdot2\text{-я строка}\\
+	\left(\left.
+	\begin{matrix}
+		1& 0&0& a_{14}\\
+		0& 1&0& a_{24}\\
+		0& 0&1& a_{34}\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&
+\end{align*}
+В специальных случаях приведенных выше, получим
+\[
+\left(\left.
+\begin{matrix}
+	1& 0&a_{13}& 0\\
+	0& 1&a_{23}& 0\\
+	0& 0&0&1\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	b_1\\
+	b_2\\
+	b_3\\
+\end{matrix}
+\right)
+\quad
+\left(\left.
+\begin{matrix}
+	1& a_{12}&0& 0\\
+	0& 0&1& 0\\
+	0& 0&0&1\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	b_1\\
+	b_2\\
+	b_3\\
+\end{matrix}
+\right)
+\quad
+\left(\left.
+\begin{matrix}
+	1& 0&a_{13}& a_{14}\\
+	0&1&a_{23}& a_{24}\\
+	0& 0&0& 0\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	0\\
+	0\\
+	1\\
+\end{matrix}
+\right)
+\quad
+\left(\left.
+\begin{matrix}
+	1&0&a_{13}& a_{14}\\
+	0& 1&a_{23}& a_{24}\\
+	0& 0&0& 0\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	b_1\\
+	b_2\\
+	0\\
+\end{matrix}
+\right)
+\]
+Полученный в результате обратного хода вид расширенной матрицы называется улучшенным ступенчатым видом, т.е., это ступенчатый вид, где все коэффициенты при главных неизвестных -- единицы, и все коэффициенты над ними равны нулю.
+
+\subsubsection*{Получение решений}
+В системе ниже, выберем переменную $x_4$ как параметр
+\[
+\left(\left.
+\begin{matrix}
+	1& 0&0& a_{14}\\
+	0& 1&0& a_{24}\\
+	0& 0&1& a_{34}\\
+\end{matrix}
+\:\right|\:
+\begin{matrix}
+	b_1\\
+	b_2\\
+	b_3\\
+\end{matrix}
+\right)
+\]
+Тогда решения имеют вид\footnote{Операция умножения матрицы на число покомпонентная (умножаем каждый элемент на число). Сумма и разность двух матриц покомпонентная (складываем или вычитаем числа на одних и тех же позициях).}
+\[
+\begin{pmatrix}
+	x_1\\
+	x_2\\
+	x_3
+\end{pmatrix}
+=
+\begin{pmatrix}
+	b_1\\
+	b_2\\
+	b_3
+\end{pmatrix}
+-
+x_4
+\begin{pmatrix}
+	a_{14}\\
+	a_{24}\\
+	a_{34}
+\end{pmatrix}
+\]
+Специальные случаи:
+\begin{align*}
+	\left(\left.
+	\begin{matrix}
+		1& 0&a_{13}& 0\\
+		0& 1&a_{23}& 0\\
+		0& 0&0&1\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&\quad
+	\text{Решения:}\quad
+	\begin{pmatrix}
+		x_1\\
+		x_2\\
+		x_4
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		b_1\\
+		b_2\\
+		b_3
+	\end{pmatrix}
+	-
+	x_3
+	\begin{pmatrix}
+		a_{13}\\
+		a_{23}\\
+		0
+	\end{pmatrix}\\
+	\left(\left.
+	\begin{matrix}
+		1& a_{12}&0& 0\\
+		0& 0&1& 0\\
+		0& 0&0&1\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		b_3\\
+	\end{matrix}
+	\right)&\quad
+	\text{Решения:}\quad
+	\begin{pmatrix}
+		x_1\\
+		x_3\\
+		x_4
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		b_1\\
+		b_2\\
+		b_3
+	\end{pmatrix}
+	-
+	x_2
+	\begin{pmatrix}
+		a_{12}\\
+		0\\
+		0
+	\end{pmatrix}\\
+	\left(\left.
+	\begin{matrix}
+		1& 0&a_{13}& a_{14}\\
+		0&1&a_{23}& a_{24}\\
+		0& 0&0& 0\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		0\\
+		0\\
+		1\\
+	\end{matrix}
+	\right)&\quad
+	\text{Решения:}\quad
+	\text{Нет решений, т.к. последнее уравнение }0 = 1
+	\\
+	\left(\left.
+	\begin{matrix}
+		1&0&a_{13}& a_{14}\\
+		0& 1&a_{23}& a_{24}\\
+		0& 0&0& 0\\
+	\end{matrix}
+	\:\right|\:
+	\begin{matrix}
+		b_1\\
+		b_2\\
+		0\\
+	\end{matrix}
+	\right)&\quad
+	\text{Решения:}\quad
+	\begin{pmatrix}
+		x_1\\
+		x_2
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		b_1\\
+		b_2
+	\end{pmatrix}
+	-
+	x_3
+	\begin{pmatrix}
+		a_{13}\\
+		a_{23}
+	\end{pmatrix}
+	-
+	x_4
+	\begin{pmatrix}
+		a_{14}\\
+		a_{24}
+	\end{pmatrix}
+\end{align*}
+\newpage
+\end{document}
